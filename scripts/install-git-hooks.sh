@@ -1,5 +1,5 @@
 #!/bin/sh
-# Point this repo at version-controlled hooks (strips Cursor co-author trailers).
+# Point this repo at version-controlled hooks
 set -e
 cd "$(git rev-parse --show-toplevel)"
 chmod +x .githooks/prepare-commit-msg

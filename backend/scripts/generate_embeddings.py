@@ -26,6 +26,10 @@ BATCH_DELAY_SECONDS = (
 )
 
 
+class DailyQuotaExhausted(Exception):
+    """Gemini free-tier embed quota hit for today."""
+
+
 async def embed_cases(session) -> int:
     result = await session.execute(
         text("""
@@ -53,7 +57,12 @@ async def embed_cases(session) -> int:
             )
             for r in batch
         ]
-        embeddings = await embedding_service.embed_batch(texts)
+        try:
+            embeddings = await embedding_service.embed_batch(texts)
+        except Exception as exc:
+            if _is_daily_quota_error(exc):
+                raise DailyQuotaExhausted from exc
+            raise
 
         for row, embedding in zip(batch, embeddings, strict=True):
             literal = "[" + ",".join(str(v) for v in embedding) + "]"
@@ -91,7 +100,12 @@ async def embed_laws(session) -> int:
             f"{r['law_name']} {r.get('section') or ''}\n{r['legal_topic'] or ''}\n{r['text']}\nCountry: {r['country']}"
             for r in batch
         ]
-        embeddings = await embedding_service.embed_batch(texts)
+        try:
+            embeddings = await embedding_service.embed_batch(texts)
+        except Exception as exc:
+            if _is_daily_quota_error(exc):
+                raise DailyQuotaExhausted from exc
+            raise
 
         for row, embedding in zip(batch, embeddings, strict=True):
             literal = "[" + ",".join(str(v) for v in embedding) + "]"
@@ -109,6 +123,11 @@ async def embed_laws(session) -> int:
     return updated
 
 
+def _is_daily_quota_error(exc: Exception) -> bool:
+    msg = str(exc).lower()
+    return "429" in msg or "resource_exhausted" in msg or "quota" in msg
+
+
 async def main() -> None:
     if not settings.database_url:
         print("ERROR: Set DATABASE_URL in backend/.env")
@@ -119,10 +138,18 @@ async def main() -> None:
         sys.exit(1)
 
     async with AsyncSessionLocal() as session:
-        print("Embedding cases...")
-        case_count = await embed_cases(session)
-        print("Embedding laws...")
-        law_count = await embed_laws(session)
+        try:
+            print("Embedding cases...")
+            case_count = await embed_cases(session)
+            print("Embedding laws...")
+            law_count = await embed_laws(session)
+        except DailyQuotaExhausted:
+            print(
+                "\nDaily Gemini embedding quota reached (1,000 requests/day on free tier).\n"
+                "Progress saved — run again tomorrow after quota resets (~midnight Pacific).\n"
+                "Tip: avoid live searches on the site while batching; they share the same quota."
+            )
+            sys.exit(0)
 
     print(f"Done. Embedded {case_count} cases and {law_count} laws.")
 
