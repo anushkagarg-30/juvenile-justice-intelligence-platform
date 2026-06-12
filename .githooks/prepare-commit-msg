@@ -1,0 +1,14 @@
+#!/bin/sh
+# Strip Cursor agent attribution from commit messages (local hook).
+# Install: ./scripts/install-git-hooks.sh
+
+if [ -z "$1" ]; then
+  exit 0
+fi
+
+# macOS and Linux compatible sed
+if sed --version >/dev/null 2>&1; then
+  sed -i '/cursoragent@cursor\.com/d; /^Co-authored-by: Cursor/d; /^Made-with: Cursor/d' "$1"
+else
+  sed -i '' '/cursoragent@cursor\.com/d; /^Co-authored-by: Cursor/d; /^Made-with: Cursor/d' "$1"
+fi

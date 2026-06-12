@@ -1,0 +1,25 @@
+# Render Blueprint — deploy from repo root (Dashboard → New → Blueprint)
+services:
+  - type: web
+    name: jjip-api
+    runtime: python
+    rootDir: backend
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: GOOGLE_API_KEY
+        sync: false
+      - key: EMBEDDING_PROVIDER
+        value: google
+      - key: EMBEDDING_MODEL
+        value: gemini-embedding-001
+      - key: EMBEDDING_DIMENSIONS
+        value: "768"
+      - key: LLM_MODEL
+        value: gemini-2.0-flash-lite
+      - key: CORS_ORIGINS
+        sync: false

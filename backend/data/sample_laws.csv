@@ -1,0 +1,57 @@
+country,law_name,section,legal_topic,text,source_url
+United States,Juvenile Justice and Delinquency Prevention Act,223,Deinstitutionalization of Status Offenders,Status offenders shall not be placed in secure detention facilities except under specified circumstances.,https://uscode.house.gov/
+United States,Juvenile Justice and Delinquency Prevention Act,225,Disproportionate Minority Contact,States must address disproportionate minority contact within the juvenile justice system.,https://uscode.house.gov/
+United States,18 U.S.C.,5032,Federal Juvenile Delinquency,A juvenile alleged to have committed a federal offense may be proceeded against as a juvenile delinquent unless waived to adult court.,https://uscode.house.gov/
+United States,U.S. Constitution,14th Amendment,Due Process,No state shall deprive any person of life liberty or property without due process of law.,https://constitution.congress.gov/
+United States,In re Gault,387 U.S. 1,Juvenile Due Process,Juveniles have the right to notice counsel confrontation and privilege against self-incrimination in delinquency proceedings.,https://www.courtlistener.com/
+United States,In re Winship,397 U.S. 358,Standard of Proof,The reasonable doubt standard applies in juvenile delinquency adjudications.,https://www.courtlistener.com/
+United States,McKeiver v. Pennsylvania,403 U.S. 528,Jury Trial,Juveniles do not have a constitutional right to a jury trial in delinquency proceedings.,https://www.courtlistener.com/
+United States,Roper v. Simmons,543 U.S. 551,Death Penalty,The Eighth Amendment prohibits the death penalty for offenses committed by juveniles under 18.,https://www.courtlistener.com/
+United States,Graham v. Florida,560 U.S. 48,Life Without Parole,Juveniles may not be sentenced to life without parole for non-homicide offenses.,https://www.courtlistener.com/
+United States,Miller v. Alabama,567 U.S. 460,Mandatory LWOP,Mandatory life without parole for juveniles violates the Eighth Amendment.,https://www.courtlistener.com/
+United States,California Welfare and Institutions Code,602,Juvenile Court Jurisdiction,Establishes jurisdiction of juvenile court over minors who violate law.,https://leginfo.legislature.ca.gov/
+United States,Texas Family Code,51.02,Definitions,Defines child and conduct indicating need for supervision in Texas juvenile law.,https://statutes.capitol.texas.gov/
+United States,New York Family Court Act,301,Jurisdiction,Defines persons and offenses subject to family court juvenile jurisdiction.,https://www.nysenate.gov/legislation/laws/FCT
+United States,Florida Statutes,985.03,Definitions,Defines terms used in Florida juvenile justice and delinquency proceedings.,https://www.flsenate.gov/Laws/Statutes
+United States,Computer Fraud and Abuse Act,1030,Cybercrime,Prohibits unauthorized access to protected computers and related offenses.,https://uscode.house.gov/
+India,Juvenile Justice (Care and Protection of Children) Act 2015,2(35),Definition of Child,Child means a person who has not completed eighteen years of age.,https://www.indiacode.nic.in/
+India,Juvenile Justice (Care and Protection of Children) Act 2015,4,Juvenile Justice Board,Constitution and powers of the Board for inquiry into heinous and serious offenses.,https://www.indiacode.nic.in/
+India,Juvenile Justice (Care and Protection of Children) Act 2015,15,Preliminary Assessment,Board may conduct preliminary assessment for children aged 16-18 in heinous offenses.,https://www.indiacode.nic.in/
+India,Juvenile Justice (Care and Protection of Children) Act 2015,18,Orders Regarding Child,Board may pass orders including counseling community service or placement in special home.,https://www.indiacode.nic.in/
+India,Protection of Children from Sexual Offences Act 2012,3,Penetrative Sexual Assault,Defines and penalizes penetrative sexual assault on children.,https://www.indiacode.nic.in/
+India,Protection of Children from Sexual Offences Act 2012,19,Reporting,Mandatory reporting of sexual offenses against children.,https://www.indiacode.nic.in/
+India,Indian Penal Code 1860,82,Act of Child Under Seven,Nothing is an offense done by a child under seven years of age.,https://www.indiacode.nic.in/
+India,Indian Penal Code 1860,83,Act of Child Above Seven,Child between seven and twelve may not be liable if immature understanding.,https://www.indiacode.nic.in/
+India,Constitution of India,Article 21,Right to Life,No person shall be deprived of life or personal liberty except by procedure established by law.,https://www.indiacode.nic.in/
+India,Constitution of India,Article 15(3),Children,State may make special provisions for children.,https://www.indiacode.nic.in/
+India,Information Technology Act 2000,66E,Violation of Privacy,Penalty for capturing or publishing private images of others.,https://www.indiacode.nic.in/
+India,Information Technology Act 2000,67,Publishing Obscene Material,Penalty for publishing or transmitting obscene material in electronic form.,https://www.indiacode.nic.in/
+United Kingdom,Children Act 1989,s.1,Welfare Principle,Child's welfare shall be the court's paramount consideration.,https://www.legislation.gov.uk/
+United Kingdom,Children Act 1989,s.31,Care Orders,Grounds for making a care or supervision order.,https://www.legislation.gov.uk/
+United Kingdom,Children and Young Persons Act 1933,s.50,Age of Criminal Responsibility,Child under 10 cannot be guilty of an offense in England and Wales.,https://www.legislation.gov.uk/
+United Kingdom,Crime and Disorder Act 1998,s.34,Detention and Training Orders,Framework for detention and training orders for young offenders.,https://www.legislation.gov.uk/
+United Kingdom,Powers of Criminal Courts (Sentencing) Act 2000,s.90,Detention at Her Majesty's Pleasure,Long-term detention for grave crimes committed by young persons.,https://www.legislation.gov.uk/
+United Kingdom,Legal Aid Sentencing and Punishment of Offenders Act 2012,s.142,Purposes of Sentencing,Court must consider purposes including punishment and reduction of crime.,https://www.legislation.gov.uk/
+United Kingdom,Human Rights Act 1998,Article 6,Fair Trial,Right to a fair and public hearing within reasonable time.,https://www.legislation.gov.uk/
+United Kingdom,Human Rights Act 1998,Article 8,Private Life,Right to respect for private and family life.,https://www.legislation.gov.uk/
+United Kingdom,Malicious Communications Act 1988,s.1,Offensive Communications,Offense of sending indecent or grossly offensive communications.,https://www.legislation.gov.uk/
+United Kingdom,Computer Misuse Act 1990,s.1,Unauthorized Access,Offense of causing a computer to perform a function with intent to secure unauthorized access.,https://www.legislation.gov.uk/
+United Kingdom,Computer Misuse Act 1990,s.3,Unauthorized Acts with Intent,Offense of unauthorized acts with intent to impair operation of a computer.,https://www.legislation.gov.uk/
+United Kingdom,Protection from Harassment Act 1997,s.1,Harassment,Prohibits a course of conduct which amounts to harassment of another.,https://www.legislation.gov.uk/
+United Kingdom,Communications Act 2003,s.127,Improper Use of Network,Offense of sending grossly offensive or indecent messages via public electronic communications.,https://www.legislation.gov.uk/
+United Kingdom,Sentencing Act 2020,s.118,Referral Orders,Framework for referral orders for youth offenders pleading guilty to first offense.,https://www.legislation.gov.uk/
+United Kingdom,Youth Justice and Criminal Evidence Act 1999,s.35,Special Measures,Special measures for vulnerable and intimidated witnesses including youth.,https://www.legislation.gov.uk/
+United Kingdom,Online Safety Act 2023,s.7,Duty of Care,Ofcom-regulated duties on user-to-user services regarding illegal content.,https://www.legislation.gov.uk/
+United Kingdom,Education Act 1996,s.444,Truancy,Offense related to failure of parent to secure regular school attendance.,https://www.legislation.gov.uk/
+India,Juvenile Justice (Care and Protection of Children) Act 2015,14,Inquiry Procedure,Procedure for inquiry by Board regarding child in conflict with law.,https://www.indiacode.nic.in/
+India,Juvenile Justice (Care and Protection of Children) Act 2015,17,Orders for Serious Offenses,Board orders for children in conflict with law for serious offenses.,https://www.indiacode.nic.in/
+India,Juvenile Justice (Care and Protection of Children) Act 2015,21,Placement in Special Home,Board may order placement in special home for specified period.,https://www.indiacode.nic.in/
+India,Juvenile Justice (Care and Protection of Children) Act 2015,39,Rehabilitation,Social reintegration and rehabilitation of children in conflict with law.,https://www.indiacode.nic.in/
+India,Information Technology Act 2000,66C,Identity Theft,Penalty for dishonestly receiving stolen computer resource or communication device.,https://www.indiacode.nic.in/
+India,Information Technology Act 2000,66D,Cheating by Personation,Penalty for cheating by personation using computer resource.,https://www.indiacode.nic.in/
+India,Information Technology Act 2000,43,Penalty for Damage,Penalty for unauthorized access and damage to computer systems.,https://www.indiacode.nic.in/
+India,Information Technology Act 2000,66,Computer Related Offenses,Penalty for dishonestly receiving stolen computer resource.,https://www.indiacode.nic.in/
+India,Bharatiya Nyaya Sanhita 2023,22,Acts of Children,Provisions regarding criminal liability of children.,https://www.indiacode.nic.in/
+India,Constitution of India,Article 39,Directive Principles,Policy to ensure children are protected from exploitation and moral abandonment.,https://www.indiacode.nic.in/
+United States,18 U.S.C.,2258A,Reporting CSAM,Requirements for electronic service providers to report child sexual abuse material.,https://uscode.house.gov/
+United States,Children's Online Privacy Protection Act,312,Minor Privacy,Restrictions on collection of personal information from children under 13 online.,https://uscode.house.gov/
