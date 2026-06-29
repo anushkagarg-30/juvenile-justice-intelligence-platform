@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { ExternalLink } from "lucide-react";
+import { ArrowRight, ExternalLink } from "lucide-react";
 import { JurisdictionBadge } from "@/components/JurisdictionBadge";
 import { SimilarityScoreBadge } from "@/components/SimilarityScoreBadge";
 import { Badge } from "@/components/ui/badge";
@@ -12,9 +13,10 @@ import type { SimilarCase } from "@/lib/types";
 interface SimilarCaseCardProps {
   caseItem: SimilarCase;
   index: number;
+  showViewLink?: boolean;
 }
 
-export function SimilarCaseCard({ caseItem, index }: SimilarCaseCardProps) {
+export function SimilarCaseCard({ caseItem, index, showViewLink = true }: SimilarCaseCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -46,16 +48,28 @@ export function SimilarCaseCard({ caseItem, index }: SimilarCaseCardProps) {
             </p>
             <p className="mt-1 text-sm text-muted-foreground">{caseItem.relevance}</p>
           </div>
-          <div className="flex items-center justify-between pt-1">
+          <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
             <span className="text-xs text-muted-foreground">
               Outcome: {caseItem.outcome}
             </span>
-            <Button variant="ghost" size="sm" asChild>
-              <a href={caseItem.sourceUrl} target="_blank" rel="noopener noreferrer">
-                Citation
-                <ExternalLink className="ml-1 h-3 w-3" />
-              </a>
-            </Button>
+            <div className="flex gap-1">
+              {showViewLink ? (
+                <Button variant="outline" size="sm" asChild>
+                  <Link href={`/cases/${caseItem.id}`}>
+                    View case
+                    <ArrowRight className="ml-1 h-3 w-3" />
+                  </Link>
+                </Button>
+              ) : null}
+              {caseItem.sourceUrl && caseItem.sourceUrl !== "#" ? (
+                <Button variant="ghost" size="sm" asChild>
+                  <a href={caseItem.sourceUrl} target="_blank" rel="noopener noreferrer">
+                    Citation
+                    <ExternalLink className="ml-1 h-3 w-3" />
+                  </a>
+                </Button>
+              ) : null}
+            </div>
           </div>
         </CardContent>
       </Card>

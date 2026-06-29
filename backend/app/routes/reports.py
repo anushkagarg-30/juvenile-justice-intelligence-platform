@@ -46,6 +46,8 @@ async def generate_report(
             country=body.country,
             case_limit=body.case_limit,
             law_limit=body.law_limit,
+            top_cases=body.top_cases,
+            laws_used=body.laws_used,
         )
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc

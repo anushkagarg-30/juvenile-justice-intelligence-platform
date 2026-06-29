@@ -1,3 +1,4 @@
+import asyncio
 import json
 from datetime import UTC, datetime
 from uuid import UUID
@@ -5,11 +6,14 @@ from uuid import UUID
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.database import AsyncSessionLocal
 from app.models import GenerateReportResponse, LawResult, SimilarCaseResult
 from app.services.case_search_service import case_search_service
+from app.services.embedding_service import embedding_service
 from app.services.law_search_service import law_search_service
 from app.services.llm_service import llm_service
 from app.utils.report_template import generate_template_report
+from app.utils.text import build_search_text
 
 
 def _report_date_label() -> str:
@@ -18,6 +22,12 @@ def _report_date_label() -> str:
 
 def _is_template_report(report_text: str) -> bool:
     return report_text.startswith("# Legal Research Report (Template)")
+
+
+def _truncate(text: str, max_len: int) -> str:
+    if len(text) <= max_len:
+        return text
+    return text[: max_len - 1].rstrip() + "…"
 
 
 def _build_report_prompt(
@@ -33,7 +43,7 @@ def _build_report_prompt(
         f"Case {i + 1}: {c.title}\n"
         f"Country: {c.country} | Court: {c.court or 'N/A'} | Year: {c.year or 'N/A'}\n"
         f"Offense: {c.offense_type or 'N/A'} | Age group: {c.age_group or 'N/A'}\n"
-        f"Facts: {c.facts}\n"
+        f"Summary: {_truncate(c.summary or c.facts, 320)}\n"
         f"Outcome: {c.outcome or 'N/A'}\n"
         f"Similarity score: {c.similarity}"
         for i, c in enumerate(cases)
@@ -43,7 +53,7 @@ def _build_report_prompt(
         f"Law {i + 1}: {law.law_name}"
         f"{f' §{law.section}' if law.section else ''}\n"
         f"Country: {law.country} | Topic: {law.legal_topic or 'N/A'}\n"
-        f"Text: {law.text}\n"
+        f"Text: {_truncate(law.text, 400)}\n"
         f"Similarity score: {law.similarity}"
         for i, law in enumerate(laws)
     )
@@ -85,7 +95,37 @@ CONTENT RULES:
 - Possible Outcomes: likely dispositions based on similar cases (probation, diversion, detention, etc.)
 - Recommendations: practical next steps for counsel or the court
 
-Keep the tone professional and neutral. Limit the report to about 600–900 words."""
+Keep the tone professional and neutral. Limit the report to about 450–650 words."""
+
+
+async def _fetch_search_results(
+    facts: str,
+    country: str | None,
+    case_limit: int,
+    law_limit: int,
+) -> tuple[list[SimilarCaseResult], list[LawResult]]:
+    search_text = build_search_text(facts, country)
+    query_embedding, _ = await embedding_service.embed_query(search_text)
+
+    async def fetch_cases() -> list[SimilarCaseResult]:
+        async with AsyncSessionLocal() as session:
+            return await case_search_service.find_similar_cases_with_embedding(
+                db=session,
+                query_embedding=query_embedding,
+                country=country,
+                limit=case_limit,
+            )
+
+    async def fetch_laws() -> list[LawResult]:
+        async with AsyncSessionLocal() as session:
+            return await law_search_service.find_relevant_laws_with_embedding(
+                db=session,
+                query_embedding=query_embedding,
+                country=country,
+                limit=law_limit,
+            )
+
+    return await asyncio.gather(fetch_cases(), fetch_laws())
 
 
 class ReportService:
@@ -94,15 +134,20 @@ class ReportService:
         db: AsyncSession,
         facts: str,
         country: str | None = None,
-        case_limit: int = 10,
-        law_limit: int = 8,
+        case_limit: int = 8,
+        law_limit: int = 6,
+        top_cases: list[SimilarCaseResult] | None = None,
+        laws_used: list[LawResult] | None = None,
     ) -> GenerateReportResponse:
-        cases = await case_search_service.find_similar_cases(
-            db=db, facts=facts, country=country, limit=case_limit
-        )
-        laws = await law_search_service.find_relevant_laws(
-            db=db, facts=facts, country=country, limit=law_limit
-        )
+        if top_cases is not None and laws_used is not None:
+            cases, laws = top_cases, laws_used
+        else:
+            cases, laws = await _fetch_search_results(
+                facts=facts,
+                country=country,
+                case_limit=case_limit,
+                law_limit=law_limit,
+            )
 
         report_date = _report_date_label()
         prompt = _build_report_prompt(facts, country, cases, laws, report_date)

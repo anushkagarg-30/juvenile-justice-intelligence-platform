@@ -1,4 +1,4 @@
-import type { AnalysisResult, CaseAnalysisInput, GeneratedReport, SimilarCase } from "./types";
+import type { AnalysisResult, CaseAnalysisInput, Country, GeneratedReport, SimilarCase } from "./types";
 
 export const EMPTY_CASE_INPUT: CaseAnalysisInput = {
   country: "",
@@ -23,7 +23,7 @@ export const DEFAULT_CASE_INPUT: CaseAnalysisInput = {
   comparisonCountries: ["United States", "United Kingdom"],
 };
 
-export const MOCK_SIMILAR_CASES: SimilarCase[] = [
+const _MOCK_SIMILAR_CASES_RAW = [
   {
     id: "1",
     title: "In re Davis",
@@ -156,6 +156,12 @@ export const MOCK_SIMILAR_CASES: SimilarCase[] = [
     sourceUrl: "https://www.courtlistener.com/",
   },
 ];
+
+export const MOCK_SIMILAR_CASES: SimilarCase[] = _MOCK_SIMILAR_CASES_RAW.map((item) => ({
+  ...item,
+  country: item.country as Country,
+  facts: item.summary,
+}));
 
 export const MOCK_REPORT: GeneratedReport = {
   id: "demo-report-001",

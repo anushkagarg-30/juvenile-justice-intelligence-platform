@@ -112,8 +112,21 @@ class GenerateReportRequest(BaseModel):
         None,
         description="Filter by country: United States, India, or United Kingdom",
     )
-    case_limit: int = Field(10, ge=1, le=25)
-    law_limit: int = Field(8, ge=1, le=20)
+    case_limit: int = Field(8, ge=1, le=25)
+    law_limit: int = Field(6, ge=1, le=20)
+    top_cases: list[SimilarCaseResult] | None = Field(
+        None,
+        description="Pre-fetched similar cases from quick search (skips re-embed + re-search)",
+    )
+    laws_used: list[LawResult] | None = Field(
+        None,
+        description="Pre-fetched laws from quick search (skips re-embed + re-search)",
+    )
+
+
+class CaseDetailResponse(BaseModel):
+    case: SimilarCaseResult
+    related_cases: list[SimilarCaseResult]
 
 
 class GenerateReportResponse(BaseModel):

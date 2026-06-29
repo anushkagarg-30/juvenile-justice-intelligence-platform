@@ -1,8 +1,10 @@
 import type {
   AnalysisResult,
   CaseAnalysisInput,
+  CaseDetailResponse,
   Country,
   GenerateReportResponse,
+  LawReference,
   LawResult,
   QuickSearchResponse,
   SimilarCase,
@@ -96,11 +98,11 @@ export async function searchCase(input: CaseAnalysisInput): Promise<AnalysisResu
   return mapQuickSearchToAnalysis(input, data, Date.now() - started);
 }
 
-/** Slow path: LLM report generation (15–60s). Call after searchCase. */
+/** Slow path: LLM report generation. Reuses search results when available. */
 export async function generateReportForAnalysis(
   result: AnalysisResult,
 ): Promise<AnalysisResult> {
-  const report = await generateReport(result.input);
+  const report = await generateReport(result);
   const updated: AnalysisResult = { ...result, report, reportReady: true };
   saveAnalysisResult(updated);
   return updated;
@@ -133,7 +135,7 @@ export async function getSimilarCases(
   return data.results.map(mapBackendCase);
 }
 
-export async function generateReport(input: CaseAnalysisInput) {
+export async function generateReport(result: AnalysisResult) {
   if (isMockMode()) {
     await new Promise((r) => setTimeout(r, 3200));
     return MOCK_REPORT;
@@ -143,10 +145,12 @@ export async function generateReport(input: CaseAnalysisInput) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      facts: buildFactsPayload(input),
-      country: input.country || null,
+      facts: buildFactsPayload(result.input),
+      country: result.input.country || null,
       case_limit: 10,
       law_limit: 8,
+      top_cases: result.similarCases.map(mapFrontendCaseToBackend),
+      laws_used: result.laws.map(mapFrontendLawToBackend),
     }),
   });
 
@@ -173,6 +177,8 @@ function buildCaseSummary(input: CaseAnalysisInput): string {
 }
 
 function mapBackendCase(item: SimilarCaseResult): SimilarCase {
+  const facts = item.facts ?? "";
+  const pct = (item.similarity * 100).toFixed(0);
   return {
     id: item.id,
     title: item.title,
@@ -181,10 +187,43 @@ function mapBackendCase(item: SimilarCaseResult): SimilarCase {
     year: item.year ?? 2020,
     offenseType: item.offense_type ?? "Unknown",
     similarity: item.similarity,
-    summary: item.facts.slice(0, 160) + (item.facts.length > 160 ? "…" : ""),
-    relevance: "Retrieved via semantic similarity to submitted case facts.",
+    facts,
+    summary: facts.slice(0, 160) + (facts.length > 160 ? "…" : ""),
+    relevance: `${pct}% semantic match on offense type, age group, and case facts.`,
     outcome: item.outcome ?? "Outcome not recorded",
     sourceUrl: item.source_url ?? "#",
+    court: item.court ?? undefined,
+    ageGroup: item.age_group ?? undefined,
+  };
+}
+
+function mapFrontendCaseToBackend(item: SimilarCase): SimilarCaseResult {
+  return {
+    id: item.id,
+    title: item.title,
+    country: item.country,
+    jurisdiction: item.jurisdiction,
+    year: item.year,
+    court: item.court ?? null,
+    offense_type: item.offenseType,
+    age_group: item.ageGroup ?? null,
+    facts: item.facts,
+    outcome: item.outcome,
+    source_url: item.sourceUrl,
+    similarity: item.similarity,
+  };
+}
+
+function mapFrontendLawToBackend(law: LawReference): LawResult {
+  return {
+    id: law.id,
+    country: law.country,
+    law_name: law.name,
+    section: law.section || null,
+    legal_topic: law.topic,
+    text: law.text,
+    source_url: law.sourceUrl,
+    similarity: law.similarity ?? 0,
   };
 }
 
@@ -197,6 +236,7 @@ function mapBackendLaw(law: LawResult) {
     topic: law.legal_topic ?? "General",
     text: law.text,
     sourceUrl: law.source_url ?? "#",
+    similarity: law.similarity,
   };
 }
 
@@ -252,4 +292,27 @@ export function loadAnalysisResult(): AnalysisResult | null {
   } catch {
     return null;
   }
+}
+
+export async function getCaseDetail(caseId: string): Promise<{
+  caseItem: SimilarCase;
+  relatedCases: SimilarCase[];
+}> {
+  if (isMockMode()) {
+    const mock = MOCK_SIMILAR_CASES.find((c) => c.id === caseId) ?? MOCK_SIMILAR_CASES[0];
+    const related = MOCK_SIMILAR_CASES.filter((c) => c.id !== mock.id).slice(0, 6);
+    return {
+      caseItem: mock,
+      relatedCases: related,
+    };
+  }
+
+  const response = await fetch(`${API_BASE}/cases/${caseId}`);
+  if (!response.ok) throw new Error(await parseApiError(response));
+
+  const data: CaseDetailResponse = await response.json();
+  return {
+    caseItem: mapBackendCase({ ...data.case, facts: data.case.facts }),
+    relatedCases: data.related_cases.map(mapBackendCase),
+  };
 }

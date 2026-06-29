@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import LawResult
 from app.services.embedding_service import embedding_service
 from app.utils.text import build_search_text
+from app.utils.vector_search import configure_hnsw_session
 
 VALID_COUNTRIES = {"United States", "India", "United Kingdom"}
 
@@ -38,6 +39,8 @@ class LawSearchService:
         limit: int = 8,
     ) -> list[LawResult]:
         embedding_literal = "[" + ",".join(str(v) for v in query_embedding) + "]"
+
+        await configure_hnsw_session(db)
 
         base_sql = """
             SELECT

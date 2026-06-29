@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.config import settings
 from app.database import get_db
 from app.models import HealthResponse
-from app.routes import reports, search
+from app.routes import cases, reports, search
 from app.services.embedding_service import embedding_service
 from app.services.query_embedding_cache import query_embedding_cache
 
@@ -45,6 +45,7 @@ async def unhandled_exception_handler(_request: Request, exc: Exception) -> JSON
 
 
 app.include_router(search.router)
+app.include_router(cases.router)
 app.include_router(reports.router)
 
 
@@ -59,6 +60,7 @@ async def root() -> dict:
             "quick_search": "POST /search/quick",
             "similar_cases": "POST /search/similar-cases",
             "relevant_laws": "POST /search/relevant-laws",
+            "case_detail": "GET /cases/{id}",
             "generate_report": "POST /reports/generate",
             "get_report": "GET /reports/{id}",
         },

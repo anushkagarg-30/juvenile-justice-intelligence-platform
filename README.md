@@ -6,9 +6,20 @@ MVP prototype for legal research on juvenile justice cases across the **United S
 
 1. User enters juvenile case facts
 2. **Fast search** (~1–3s): top similar cases + relevant laws via `POST /search/quick`
-3. **Optional report** (15–60s): AI legal research memo via `POST /reports/generate` from the results page
+3. **Optional report** (~10–30s): AI legal research memo via `POST /reports/generate` from the results page
 
-Search and report generation are separate paths so retrieval stays fast at scale (10k+ cases target).
+Search and report generation are separate paths so retrieval stays fast at scale (10,000+ embedded cases). Report generation reuses search results to avoid duplicate embedding and DB queries.
+
+## Current status
+
+| Metric | Value |
+|--------|-------|
+| Cases indexed | 10,000 (embedded) |
+| Laws indexed | 56 (embedded) |
+| Active jurisdictions | United States, India, United Kingdom |
+| Phase | Testing & pilot feedback |
+
+The platform is in an active testing phase. We are reaching out to law firms and legal practitioners for pilot feedback on search relevance, report quality, and workflow fit.
 
 ## Tech stack
 
@@ -132,6 +143,7 @@ The Next.js dev server proxies API requests to the backend when `NEXT_PUBLIC_API
 | POST | `/search/quick` | **Fast:** cases + laws (single embed) |
 | POST | `/search/similar-cases` | Similar cases only |
 | POST | `/search/relevant-laws` | Relevant laws only |
+| GET | `/cases/{id}` | Case detail + related precedents |
 | POST | `/reports/generate` | **Slow:** full AI research report |
 | GET | `/reports/{id}` | Retrieve a previously generated report |
 
@@ -144,6 +156,29 @@ The Next.js dev server proxies API requests to the backend when `NEXT_PUBLIC_API
 - [x] `/search/similar-cases` endpoint
 - [x] `/reports/generate` endpoint
 - [x] React UI
+- [x] 10,000-case corpus with HNSW vector search
+- [x] Performance: parallel search, embedding cache, report result reuse
+- [x] Case detail pages with related-precedent search
+
+## Roadmap & next steps
+
+### Jurisdiction expansion
+The UI already shows additional countries as **Coming soon** (Canada, Australia, Germany, France, Brazil, South Africa, Nigeria, Japan). Next steps:
+
+- Ingest and embed juvenile justice **cases and statutes** from those jurisdictions
+- Expand law corpus beyond the current 56 statutes
+- Source real precedents from official databases (CourtListener, Indian Kanoon, BAILII, etc.) alongside synthetic training data
+
+### Search quality & similarity
+Semantic similarity scores are currently in a **testing and calibration phase**. Typical strong matches appear in the 75–85% range for free-text queries against a large corpus. Planned improvements:
+
+- **Embedding alignment** — match query text format to stored case/law embedding format
+- **Hybrid retrieval** — combine structured filters (country, offense type, age group) with vector search
+- **Reranking** — second-stage model to improve precision and confidence scores
+- **Law firm pilot feedback** — validate relevance with practicing attorneys before tuning thresholds for production
+
+### Pilot program
+We are actively reaching out to **law firms and juvenile justice practitioners** to test the platform, evaluate report quality, and gather feedback on real-world workflows. If you are interested in participating, open an issue or contact the maintainer.
 
 ## Deployment
 

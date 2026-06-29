@@ -96,7 +96,7 @@ export default function ResultsPage() {
           <CardContent className="flex flex-wrap items-center justify-between gap-4 py-4">
             <p className="text-sm text-foreground/90">
               Search complete. Generate a full AI research memo when you need citations, cross-country
-              comparison, and legal argument suggestions (typically 15–60 seconds).
+              comparison, and legal argument suggestions (typically 10–30 seconds with cached results).
             </p>
             <Button variant="outline" size="sm" onClick={handleGenerateReport}>
               <Sparkles className="h-4 w-4" />

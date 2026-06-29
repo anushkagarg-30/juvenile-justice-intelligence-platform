@@ -18,6 +18,7 @@ class Settings(BaseSettings):
     embedding_cache_enabled: bool = True
     embedding_cache_db: bool = True
     embedding_cache_max_entries: int = 500
+    hnsw_ef_search: int = 64
     llm_model: str = "gemini-2.0-flash-lite"
     cors_origins: str = (
         "http://localhost:5173,"

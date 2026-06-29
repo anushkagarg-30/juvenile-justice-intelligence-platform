@@ -19,9 +19,12 @@ export interface SimilarCase {
   offenseType: string;
   similarity: number;
   summary: string;
+  facts: string;
   relevance: string;
   outcome: string;
   sourceUrl: string;
+  court?: string;
+  ageGroup?: string;
 }
 
 export interface LawReference {
@@ -32,6 +35,7 @@ export interface LawReference {
   topic: string;
   text: string;
   sourceUrl: string;
+  similarity?: number;
 }
 
 export interface ConstitutionalProtection {
@@ -76,7 +80,9 @@ export interface SimilarCaseResult {
   year?: number | null;
   court?: string | null;
   offense_type?: string | null;
+  age_group?: string | null;
   facts: string;
+  summary?: string | null;
   outcome?: string | null;
   source_url?: string | null;
   similarity: number;
@@ -100,6 +106,12 @@ export interface QuickSearchResponse {
   relevant_laws: LawResult[];
   case_count: number;
   law_count: number;
+  embedding_cache_hit?: boolean;
+}
+
+export interface CaseDetailResponse {
+  case: SimilarCaseResult & { similarity: number };
+  related_cases: SimilarCaseResult[];
 }
 
 export interface GenerateReportResponse {
