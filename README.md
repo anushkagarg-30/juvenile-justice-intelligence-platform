@@ -14,12 +14,24 @@ Search and report generation are separate paths so retrieval stays fast at scale
 
 | Metric | Value |
 |--------|-------|
-| Cases indexed | 10,000 (embedded) |
-| Laws indexed | 56 (embedded) |
+| Cases indexed | 10,000 (embedded, synthetic MVP corpus) |
+| Laws indexed | 56 (embedded, curated summaries) |
 | Active jurisdictions | United States, India, United Kingdom |
 | Phase | Testing & pilot feedback |
 
 The platform is in an active testing phase. We are reaching out to law firms and legal practitioners for pilot feedback on search relevance, report quality, and workflow fit.
+
+### Data disclaimer
+
+This is an **engineering MVP / research prototype**, not a certified legal database or source of legal advice.
+
+| Corpus | What it is |
+|--------|------------|
+| **Cases (10,000)** | **Synthetic / illustrative** records generated with `backend/scripts/case_generator.py` and bulk ingest to stress-test vector search at scale. They are **not verified court judgments**. Titles and source URLs are template-style references, not proof of scraping official dockets. |
+| **Laws (56)** | **Curated summaries** using real statute and case names (US, India, UK). Text is paraphrased for the prototype — **not verbatim official statute text** from government sources. |
+| **Reports** | AI-generated research memos from retrieved context. For research and demo use only. |
+
+Before any professional or law-firm use, replace synthetic cases with **verified, anonymized judgments** and ingest **section-level official statute text** with proper licensing and citation checks. See `docs/data_sources.md` for intended real-data sources.
 
 ## Tech stack
 

@@ -32,7 +32,7 @@ export function Sidebar() {
   return (
     <aside className="glass-strong relative z-20 flex h-full w-64 shrink-0 flex-col border-r border-white/10">
       <div className="border-b border-white/10 p-6">
-        <Link href="/dashboard" className="flex items-center gap-3">
+        <Link href="/" className="flex items-center gap-3" aria-label="JJIP home">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-violet-600">
             <Scale className="h-4 w-4 text-white" />
           </div>
